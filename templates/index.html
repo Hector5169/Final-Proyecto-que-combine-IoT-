@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tienda - Productos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <header>
+        <h1>Tienda Virtual</h1>
+        {% if usuario %}
+        <p>Bienvenido, {{ usuario }} | <a href="{{ url_for('logout') }}">Cerrar sesión</a></p>
+        {% else %}
+        <form action="/login" method="POST">
+            <input type="text" name="username" placeholder="Usuario" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit">Login</button>
+        </form>
+        <form action="/register" method="POST">
+            <input type="text" name="username" placeholder="Nuevo usuario" required>
+            <input type="password" name="password" placeholder="Nueva contraseña" required>
+            <button type="submit">Registrar</button>
+        </form>
+        {% endif %}
+    </header>
+
+    <main>
+        <h2>Productos disponibles</h2>
+        <div class="productos">
+            {% for p in productos %}
+            <div class="producto">
+                <a href="{{ url_for('producto', producto_id=p.id) }}">
+                    <img src="{{ url_for('static', filename=p.imagen) }}" alt="{{ p.name }}">
+                    <h3>{{ p.nombre }}</h3>
+                    <h3>{{ p.vendedor }}</h3>
+                    <h3>{{ p.precio }}</h3>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+
+</html>

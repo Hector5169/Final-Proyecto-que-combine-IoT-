@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>{{ producto.nombre }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <header>
+        <h1>Tienda Virtual</h1>
+        {% if usuario %}
+        <p>Bienvenido, {{ usuario }} | <a href="{{ url_for('logout') }}">Cerrar sesión</a></p>
+        {% else %}
+        <form action="/login" method="POST">
+            <input type="text" name="username" placeholder="Usuario" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit">Login</button>
+        </form>
+        <form action="/register" method="POST">
+            <input type="text" name="username" placeholder="Nuevo usuario" required>
+            <input type="password" name="password" placeholder="Nueva contraseña" required>
+            <button type="submit">Registrar</button>
+        </form>
+        {% endif %}
+    </header>
+
+    <section class="producto-detalle">
+        <img src="{{ url_for('static', filename=producto.imagen) }}" alt="{{ producto.nombre }}" width="300" />
+        <p>Precio: ${{ producto.precio }}</p>
+        <p>Vendedor: {{ producto.vendedor }}</p>
+        <!-- Aquí puedes añadir botón "Añadir al carrito" si quieres -->
+    </section>
+
+    <section class="reseñas">
+        <h2>Reseñas del producto</h2>
+
+        {% if reseñas %}
+        <ul>
+            {% for r in reseñas %}
+            <li><strong>{{ r.usuario }}:</strong> {{ r.comentario }} <em>(Calificación: {{ r.calificacion }}/5)</em></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No hay reseñas para este producto.</p>
+        {% endif %}
+    </section>
+
+    <!-- Opcional: formulario para agregar reseña solo si está logueado -->
+    {% if usuario %}
+    <section class="agregar-reseña">
+        <h3>Deja tu reseña</h3>
+        <form method="POST" action="{{ url_for('agregar_resena', producto_id=producto.id) }}">
+            <textarea name="comentario" required></textarea><br />
+            <label>Calificación:
+                <select name="calificacion" required>
+                    <option value="5">5 - Excelente</option>
+                    <option value="4">4 - Bueno</option>
+                    <option value="3">3 - Regular</option>
+                    <option value="2">2 - Malo</option>
+                    <option value="1">1 - Muy malo</option>
+                </select>
+            </label><br />
+            <button type="submit">Enviar reseña</button>
+        </form>
+    </section>
+    {% else %}
+    <p><a href="{{ url_for('login') }}">Inicia sesión</a> para dejar una reseña.</p>
+    {% endif %}
+
+</body>
+
+</html>

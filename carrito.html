@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audífonos Bluetooth X200</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+
+</head>
+
+<body>
+    <!-- Header -->
+    <header id="header" class="header">
+        <div class="container">
+            <div class="row">
+                <div class="four columns">
+                    <img src="img/logo.jpg" id="logo">
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección del Producto -->
+    <div class="producto-container">
+        <div class="producto-imagen">
+            <img id="imagenProducto" src="" alt="Producto">
+        </div>
+        <div class="producto-detalles">
+            <h1 id="tituloProducto"></h1>
+            <p class="precio">$15 USD</p>
+            <div class="acciones">
+                <button class="btn-comprar">Comprar ahora</button>
+                <button class="btn-carrito">Añadir al carrito</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Reseñas -->
+    <div class="resenas-container">
+        <h2>Reseñas de los usuarios</h2>
+
+        <div class="formulario-resena">
+            <h3>Deja tu reseña</h3>
+            <form id="formResena">
+                <input type="text" id="nombre" placeholder="Tu nombre" required>
+                <textarea id="comentario" rows="4" placeholder="Escribe tu opinión..." required></textarea>
+                <button type="submit">Enviar reseña</button>
+            </form>
+        </div>
+    </div>
+
+
+    <footer id="footer" class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="four columns">
+                    <nav id="principal" class="menu">
+                        <a class="enlace" href="#">Para tu Negocio</a>
+                        <a class="enlace" href="#">Conviertete en Instructor</a>
+                        <a class="enlace" href="#">Aplicaciones Móviles</a>
+                        <a class="enlace" href="#">Soporte</a>
+                        <a class="enlace" href="#">Temas</a>
+                    </nav>
+                </div>
+                <div class="four columns">
+                    <nav id="secundaria" class="menu">
+                        <a class="enlace" href="#">¿Quienes Somos?</a>
+                        <a class="enlace" href="#">Empleo</a>
+                        <a class="enlace" href="#">Blog</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const form = document.getElementById('formResena');
+        const contenedor = document.querySelector('.resenas-container');
+
+        function guardarResena(nombre, comentario) {
+            const resenas = JSON.parse(localStorage.getItem('resenas')) || [];
+            resenas.push({
+                nombre,
+                comentario
+            });
+            localStorage.setItem('resenas', JSON.stringify(resenas));
+        }
+
+        function cargarResenas() {
+            const resenas = JSON.parse(localStorage.getItem('resenas')) || [];
+            const formulario = document.querySelector('.formulario-resena');
+
+            resenas.forEach(({
+                nombre,
+                comentario
+            }) => {
+                const nuevaResena = document.createElement('div');
+                nuevaResena.classList.add('resena');
+                nuevaResena.innerHTML = `
+        <p class="autor">${nombre}</p>
+        <p class="contenido">${comentario}</p>
+      `;
+                contenedor.insertBefore(nuevaResena, formulario);
+            });
+        }
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const nombre = document.getElementById('nombre').value;
+            const comentario = document.getElementById('comentario').value;
+
+            if (nombre && comentario) {
+                const nuevaResena = document.createElement('div');
+                nuevaResena.classList.add('resena');
+                nuevaResena.innerHTML = `
+        <p class="autor">${nombre}</p>
+        <p class="contenido">${comentario}</p>
+      `;
+                const formulario = document.querySelector('.formulario-resena');
+                contenedor.insertBefore(nuevaResena, formulario);
+
+                guardarResena(nombre, comentario);
+                form.reset();
+            }
+        });
+
+        // Cargar reseñas existentes al inicio
+        cargarResenas();
+
+        function getParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                imagen: params.get('imagen'),
+                titulo: params.get('titulo'),
+            };
+        }
+
+        const {
+            imagen,
+            titulo
+        } = getParams();
+
+        console.log(imagen)
+
+        // Asigna los valores al HTML
+        document.getElementById('imagenProducto').src = `${imagen}`;
+        document.getElementById('tituloProducto').textContent = titulo;
+    </script>
+
+
+</body>
+
+</html>
