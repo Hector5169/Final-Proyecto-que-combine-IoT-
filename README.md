@@ -37,6 +37,19 @@ Este proyecto es una plataforma de comercio electrónico enfocada en cursos en l
 
 ## Estructura del Proyecto
 
+/Mi_proyecto
+│── app.py # Backend con Flask
+│── schema.sql # Script para crear las tablas
+│── database.db # Base de datos SQLite
+│
+├── /static
+│ ├── style.css # Estilos del frontend
+│ └── productos.js # MCP: lógica del carrito y reseñas
+│
+└── /templates
+├── index.html # Página principal
+└── carrito.html # Detalle del curso y reseñas
+
 ---
 
 ## Requisitos
@@ -62,5 +75,14 @@ sqlite3 database.db < schema.sql
 
 # 4. Ejecutar el servidor
 python app.py
+
+| Ruta             | Método | Descripción                            |
+| ---------------- | ------ | -------------------------------------- |
+| `/`              | GET    | Muestra el catálogo de cursos          |
+| `/register`      | POST   | Registra un nuevo usuario              |
+| `/login`         | POST   | Inicia sesión                          |
+| `/logout`        | GET    | Cierra sesión                          |
+| `/producto/<id>` | GET    | Muestra detalles del curso             |
+| `/api/productos` | GET    | Devuelve los productos en formato JSON |
 
 
